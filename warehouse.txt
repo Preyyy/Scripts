@@ -1,0 +1,3 @@
+select PK_mscWarehouse, description from mscWarehouse
+select PK_mscItemCategory, description from mscItemCategory
+Select PK_mscPriceSchemes, description from mscPriceschemes

@@ -1,0 +1,100 @@
+WITH PivotData AS (
+  SELECT
+    ip.FK_iwItems AS ItemID,
+    ip.price AS ItemPrice,
+    ip.FK_mscPriceSchemes AS PriceSchemeID,
+    itm.itemgroup AS ItemGroup,
+    itm.itemdesc AS ItemDescription,
+    itm.FK_mscItemCategory AS ItemCategoryID,
+    cat.description AS ItemCategory,
+    ip.FK_mscWarehouse AS WarehouseID,
+    wh.description AS WarehouseName
+  FROM
+    iwItemPrices ip
+    INNER JOIN IwiTEMS itm ON ip.FK_iwItems = itm.PK_iwItems
+    INNER JOIN mscItemCategory cat ON itm.FK_mscItemCategory = cat.PK_mscItemCategory
+    INNER JOIN mscWarehouse wh ON ip.FK_mscWarehouse = wh.PK_mscWarehouse
+    INNER JOIN iwWareItem wi ON wi.FK_iwItems = itm.PK_iwItems AND wi.FK_mscWarehouse = wh.PK_mscWarehouse
+    INNER JOIN mscPriceSchemes ps ON ip.FK_mscPriceSchemes = ps.PK_mscPriceSchemes
+  WHERE
+	--- change where
+    ip.FK_mscWarehouse = '1002'
+    AND itm.FK_mscItemCategory = '1005'
+)
+
+SELECT
+  ItemID,
+  ItemDescription,
+
+  [1001] AS OPD_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1001] * 0.05 + [1001]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1016, ''')') AS OPD_MARKUP_5_PERCENT,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1001] * 0.10 + [1001]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1029, ''')') AS OPD_MARKUP_10_PERCENT,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1001] * 0.12 + [1001]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1044, ''')') AS OPD_MARKUP_12_PERCENT,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1001] * 0.20 + [1001]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1042, ''')') AS OPD_MARKUP_20_PERCENT,
+  [1002] AS ER_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1002] * 0.05 + [1002]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1015, ''')') AS ER_MARKUP_5_PERCENT,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1002] * 0.10 + [1002]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1028, ''')') AS ER_MARKUP_10_PERCENT,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1002] * 0.12 + [1002]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1041, ''')') AS ER_MARKUP_12_PERCENT,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1002] * 0.20 + [1002]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1056, ''')') AS ER_MARKUP_20_PERCENT,
+  [1004] AS CASH_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1004] * 0.05 + [1004]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1027, ''')') AS CASH_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1004] * 0.10 + [1004]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1039, ''')') AS CASH_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1004] * 0.12 + [1004]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1045, ''')') AS CASH_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1004] * 0.20 + [1004]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1066, ''')') AS CASH_MARKUP_20_Percent,
+  [1005] AS ISO_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1005] * 0.05 + [1005]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1017, ''')') AS ISO_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1005] * 0.10 + [1005]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1031, ''')') AS ISO_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1005] * 0.12 + [1005]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1046, ''')') AS ISO_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1005] * 0.20 + [1005]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1065, ''')') AS ISO_MARKUP_20_Percent,
+  [1006] AS PRIVATE__StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1006] * 0.05 + [1006]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1018, ''')') AS PRIVATE_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1006] * 0.10 + [1006]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1016, ''')') AS PRIVATE_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1006] * 0.12 + [1006]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1047, ''')') AS PRIVATE_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1006] * 0.20 + [1006]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1058, ''')') AS PRIVATE_MARKUP_20_Percent,
+  [1007] AS SEMI_PRIVATE_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1007] * 0.05 + [1007]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1019, ''')') AS SEMI_PRIVATE_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1007] * 0.10 + [1007]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1032, ''')') AS SEMI_PRIVATE_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1007] * 0.12 + [1007]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1048, ''')') AS SEMI_PRIVATE_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1007] * 0.20 + [1007]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1059, ''')') AS SEMI_PRIVATE_MARKUP_20_Percent,
+  [1008] AS SUITE_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1008] * 0.05 + [1008]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1020, ''')') AS SUITE_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1008] * 0.10 + [1008]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1033, ''')') AS SUITE_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1008] * 0.12 + [1008]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1049, ''')') AS SUITE_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1008] * 0.20 + [1008]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1060, ''')') AS SUITE_MARKUP_20_Percent,
+  [1009] AS WARD_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1009] * 0.05 + [1009]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1021, ''')') AS WARD_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1009] * 0.10 + [1009]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1030, ''')') AS WARD_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1009] * 0.12 + [1009]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1050, ''')') AS WARD_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1009] * 0.20 + [1009]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1057, ''')') AS WARD_MARKUP_20_Percent,
+  [1010] AS RECOV_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1010] * 0.05 + [1010]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1022, ''')') AS RECOV_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1010] * 0.10 + [1010]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1034, ''')') AS RECOV_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1010] * 0.12 + [1010]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1051, ''')') AS RECOV_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1010] * 0.20 + [1010]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1061, ''')') AS RECOV_MARKUP_20_Percent,
+  [1011] AS DELIVERY_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1011] * 0.05 + [1011]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1023, ''')') AS DELIVERY_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1011] * 0.10 + [1011]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1035, ''')') AS DELIVERY_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1011] * 0.12 + [1011]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1052, ''')') AS DELIVERY_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1011] * 0.20 + [1011]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1062, ''')') AS DELIVERY_MARKUP_20_Percent,
+  [1012] AS NICU_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1012] * 0.05 + [1012]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1024, ''')') AS NICU_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1012] * 0.10 + [1012]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1040, ''')') AS NICU_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1012] * 0.12 + [1012]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1053, ''')') AS NICU_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1012] * 0.20 + [1012]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1067, ''')') AS NICU_MARKUP_20_Percent,
+  [1013] AS ICU_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1013] * 0.05 + [1013]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1025, ''')') AS ICU_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1013] * 0.10 + [1013]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1037, ''')') AS ICU_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1013] * 0.12 + [1013]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1054, ''')') AS ICU_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1013] * 0.20 + [1013]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1064, ''')') AS ICU_MARKUP_20_Percent,
+  [1014] AS NICU_ISO_StandardPrice,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1014] * 0.05 + [1014]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1026, ''')') AS NICU_ISO_MARKUP_5_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1014] * 0.10 + [1014]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1036, ''')') AS NICU_ISO_MARKUP_10_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1014] * 0.12 + [1014]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1055, ''')') AS NICU_ISO_MARKUP_12_Percent,
+  CONCAT('UPDATE iwitemprices SET price = ''', ([1014] * 0.20 + [1014]), ''' WHERE FK_iwitems = ''', ItemID, ''' AND FK_mscPriceSchemes IN (''', 1063, ''')') AS NICU_ISO_MARKUP_20_Percent
+
+FROM PivotData
+PIVOT (
+  MAX(ItemPrice)
+  FOR PriceSchemeID IN ([1001], [1002], [1004], [1005], [1006], [1007], [1008], [1009], [1010], [1011], [1012], [1013], [1014])
+) AS PivotTable
+ORDER BY ItemID;

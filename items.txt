@@ -1,0 +1,40 @@
+
+USE [TrainingDB_ACEMEDICALCENTERPALAWAN]
+GO
+
+SELECT [FK_mscItemCategory]
+      ,[itemgroup]      
+	  ,[itemdesc]      
+	  ,[unit]
+      ,[bigunit]
+      ,[conversion]     
+	  ,[isactive]
+      ,[isfixedasset]
+      ,[isallowdiscount]
+      ,[isopenprice]
+      ,[isreagentonly]     
+	  ,[isproductiononly]
+      ,[isvatable]
+      ,[orderqty]
+      ,[lowinven]
+      ,[maxinven]
+      ,[statpercent]
+	  ,[lastpurcdate]
+      ,[minsaleprice]
+      ,[maxsaleprice]
+      ,[lastprdate]
+      ,[lastprqty]     
+      ,[isInventory]
+      ,[printcateg]
+      ,[avgcost]
+      ,[isVATExempt]
+      ,[isZeroRated]
+      ,[isDonation]
+	  -- FROM [dbo].[iwItems]
+	  -- FROM [dbo].[iwItems] WHERE itemgroup = 'SUP' 
+	   FROM [dbo].[iwItems] where [FK_mscItemCategory] = '1001'
+	  
+
+GO
+
+

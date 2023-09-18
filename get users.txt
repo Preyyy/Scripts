@@ -1,0 +1,17 @@
+USE [TrainingDB_ACEMEDICALCENTERPALAWAN]
+GO
+
+SELECT [PK_appsysUsers]
+      ,[usercode]
+      ,[UserFullname]
+      ,[Branch]
+      ,[Department]
+      ,[Section]
+      ,[Position]
+      ,[UserGroup]
+     
+FROM [dbo].[vwSystemUsersMstrList]
+WHERE ([Department] = '5TH FLOOR - MEDICAL SURGICAL WARD' OR [Department] = '6TH FLOOR - MEDICAL SURGICAL WARD' OR Department = 'OR/DR') 
+      AND [Position] <> 'Doctor' 
+	  AND [UserGroup] <> 'DISCONNECTED USERS'
+	  order by Department

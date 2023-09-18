@@ -1,0 +1,114 @@
+WITH PivotData AS (
+  SELECT
+    ip.FK_iwItems AS ItemID,
+    ip.price AS ItemPrice,
+    ip.FK_mscPriceSchemes AS PriceSchemeID,
+    itm.itemgroup AS ItemGroup,
+    itm.itemdesc AS ItemDescription,
+    itm.FK_mscItemCategory AS ItemCategoryID,
+    cat.description AS ItemCategory,
+    ip.FK_mscWarehouse AS WarehouseID,
+    wh.description AS WarehouseName
+  FROM
+    iwItemPrices ip
+    INNER JOIN IwiTEMS itm ON ip.FK_iwItems = itm.PK_iwItems
+    INNER JOIN mscItemCategory cat ON itm.FK_mscItemCategory = cat.PK_mscItemCategory
+    INNER JOIN mscWarehouse wh ON ip.FK_mscWarehouse = wh.PK_mscWarehouse
+    INNER JOIN iwWareItem wi ON wi.FK_iwItems = itm.PK_iwItems AND wi.FK_mscWarehouse = wh.PK_mscWarehouse
+    INNER JOIN mscPriceSchemes ps ON ip.FK_mscPriceSchemes = ps.PK_mscPriceSchemes
+  WHERE
+     ip.FK_mscWarehouse = '1005'
+    AND itm.FK_mscItemCategory = '1003'
+)
+
+SELECT
+  ItemID,
+  ItemDescription,
+  [1001] as Outpatient,
+  [1002] as Emergency,
+  [1003] as Room_In,
+  [1004] as Cash_Transaction,
+  [1005] as Isolation,
+  [1006] as Private,
+  [1007] as Semi_Private,
+  [1008] as Suite,
+  [1009] as Ward,
+  [1010] as Recovery,
+  [1011] as Delivery,
+  [1012] as NICU,
+  [1013] as ICU,
+  [1014] as NICU_Isolation,
+  [1015] as HMO_5_PERCENT_Emergency,
+  [1016] as HMO_5_PERCENT_Outpatient,
+  [1017] as HMO_5_PERCENT_Isolation,
+  [1018] as HMO_5_PERCENT_Private,
+  [1019] as HMO_5_Semi_Private,
+  [1020] as HMO_5_PERCENT_Suite,
+  [1021] as HMO_5_PERCENT_Ward,
+  [1022] as HMO_5_PERCENT_Recovery,
+  [1023] as HMO_5_PERCENT_Delivery,
+  [1024] as HMO_5_PERCENT_NICU,
+  [1025] as HMO_5_PERCENT_ICU,
+  [1026] as HMO_5_PERCENT_NICU_Isolation,
+  [1027] as HMO_5_PERCENT_Cash_Transaction,
+  [1028] as HMO_10_PERCENT_Emergency,
+  [1029] as HMO_10_PERCENT_Outpatient,
+  [1030] as HMO_10_PERCENT_Ward,
+  [1031] as HMO_10_PERCENT_Private,
+  [1032] as HMO_10_PERCENT_Semi_Private,
+  [1033] as HMO_10_PERCENT_Suite,
+  [1034] as HMO_10_PERCENT_Recovery,
+  [1035] as HMO_10_PERCENT_Delivery,
+  [1036] as HMO_10_PERCENT_NICU_Isolation,
+  [1037] as HMO_10_PERCENT_ICU,
+  [1038] as HMO_10_PERCENT_Isolation,
+  [1039] as HMO_10_PERCENT_Cash_Transaction,
+  [1040] as HMO_10_PERCENT_NICU,
+  [1041] as HMO_12_PERCENT_Emergency,
+  [1042] as HMO_20_PERCENT_Outpatient,
+  [1043] as PBAC_Outpatient,
+  [1044] as HMO_12_PERCENT_Outpatient,
+  [1045] as HMO_12_PERCENT_Cash_Transaction,
+  [1046] as HMO_12_PERCENT_Isolation,
+  [1047] as HMO_12_PERCENT_Private,
+  [1048] as HMO_12_PERCENT_Semi_Private,
+  [1049] as HMO_12_PERCENT_Suite,
+  [1050] as HMO_12_PERCENT_Ward,
+  [1051] as HMO_12_PERCENT_Recovery,
+  [1052] as HMO_12_PERCENT_Delivery,
+  [1053] as HMO_12_PERCENT_NICU,
+  [1054] as HMO_12_PERCENT_ICU,
+  [1055] as HMO_12_PERCENT_NICU_Isolation,
+  [1056] as HMO_20_PERCENT_Emergency,
+  [1057] as HMO_20_PERCENT_Ward,
+  [1058] as HMO_20_PERCENT_Private,
+  [1059] as HMO_20_PERCENT_Semi_Private,
+  [1060] as HMO_20_PERCENT_Suite,
+  [1061] as HMO_20_PERCENT_Recovery,
+  [1062] as HMO_20_PERCENT_Delivery,
+  [1063] as HMO_20_PERCENT_NICU_Isolation,
+  [1064] as HMO_20_PERCENT_ICU,
+  [1065] as HMO_20_PERCENT_Isolation,
+  [1066] as HMO_20_PERCENT_Cash_Transaction,
+  [1067] as HMO_20_PERCENT_NICU
+FROM PivotData
+PIVOT (
+  MAX(ItemPrice)
+  FOR PriceSchemeID IN (
+    [1001], [1002], [1003], [1004], [1005], [1006], [1007], [1008], [1009], [1010],
+    [1011], [1012], [1013], [1014], [1015], [1016], [1017], [1018], [1019], 
+    [1020], [1021], [1022], [1023], [1024], [1025], [1026], [1027], [1028], 
+    [1029], [1030], [1031], [1032], [1033], [1034], [1035], [1036], [1037], 
+    [1038], [1039], [1040], [1041], [1042], [1043], [1044], [1045], [1046],
+    [1047], [1048], [1049], [1050], [1051], [1052], [1053], [1054], [1055],
+    [1056], [1057], [1058], [1059], [1060], [1061], [1062], [1063], [1064],
+    [1065], [1066], [1067]
+  )
+) AS PivotTable
+WHERE
+  [1001] = 0
+  AND [1002] = 0
+  AND [1003] = 0
+  -- Add conditions for other price scheme columns if needed
+
+ORDER BY ItemID;
